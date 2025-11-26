@@ -154,6 +154,8 @@ class MakeRegister(View):
             login(request, new_user)
             return redirect('home')
 
+        return redirect('register')
+
 
 class MakeLogin(View):
     def post(self, request, *args, **kwargs):
