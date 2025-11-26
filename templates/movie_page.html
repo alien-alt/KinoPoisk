@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Детали фильма</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 40px;
+      background-color: #1f1f1f;
+      border-bottom: 1px solid #333;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    nav button.active {
+      color: #ff6b00;
+      font-weight: bold;
+    }
+
+    nav button:hover {
+      color: #ff6b00;
+    }
+
+    .search-bar input {
+      background-color: #2a2a2a;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      color: #fff;
+      width: 200px;
+    }
+
+    .search-bar input::placeholder {
+      color: #aaa;
+    }
+
+    main {
+      padding: 30px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .movie-detail {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .movie-poster {
+      width: 300px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .movie-poster img {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+    }
+
+    .movie-info {
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .movie-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .movie-description {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #ccc;
+    }
+
+    .actors-section {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .actors-list {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .actor {
+      flex: 0 0 auto;
+      width: 100px;
+      text-align: center;
+    }
+
+    .actor img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #333;
+    }
+
+    .actor-name {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .rating-section, .comment-section {
+      background-color: #1c1c1c;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 700px;
+    }
+
+    .rating-section input[type="number"] {
+      width: 60px;
+      padding: 6px;
+      border-radius: 4px;
+      border: none;
+      background-color: #2a2a2a;
+      color: #fff;
+    }
+
+    .rating-section button,
+    .comment-section button {
+      padding: 8px 16px;
+      border: none;
+      background-color: #ff6b00;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .comment-section textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 8px;
+      border-radius: 4px;
+      border: none;
+      background-color: #2a2a2a;
+      color: #fff;
+      resize: vertical;
+    }
+
+    .user-comments {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .user-comment {
+      background-color: #2a2a2a;
+      padding: 10px 15px;
+      border-radius: 6px;
+    }
+
+    .user-comment .username {
+      font-weight: bold;
+      color: #ff6b00;
+      margin-bottom: 5px;
+    }
+
+    .user-comment .comment-text {
+      color: #fff;
+    }
+
+    /* Скрываем скроллбар для вебкита */
+    .actors-list::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .actors-list::-webkit-scrollbar-thumb {
+      background-color: #555;
+      border-radius: 3px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+    <a href="{% url 'home' %}">Главная</a>
+  </header>
+
+  <main>
+    <!-- Детальная информация о фильме -->
+    <div class="movie-detail">
+      <div class="movie-poster">
+        <img src="{{movie.image.url}}" alt="Фильм 1">
+      </div>
+      <div class="movie-info">
+        <div class="movie-title">{{movie.name}}</div>
+        <div class="movie-description">
+          {{movie.description}}
+        </div>
+
+        <!-- Колонка актеров -->
+        <div class="actors-section">
+          <div>Актеры:</div>
+          <div class="actors-list">
+            {% for actor in actors %}
+              <a href="{% url 'actor' actor.id %}" class="movie-link" style="text-decoration: none; color: inherit;">
+              <div class="actor">
+                <img src="{{ actor.photo.url }}" alt="Актер 1">
+                <div class="actor-name">{{actor.name}}, {{actor.last_name}}</div>
+              </div>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Форма для оценки фильма -->
+    <div class="rating-section">
+      <h3>Оценить фильм</h3>
+        <form method="post" action="{% url 'make_add_rating' movie.id %}">
+        {% csrf_token %}
+        <label for="rating">Ваша оценка (1-5): </label>
+        <input type="number" id="rating" name="rating" min="1" max="5">
+        <br>
+        <button type="submit">Отправить рейтинг</button>
+      </form>
+    </div>
+
+    <!-- Форма для комментариев -->
+    <div class="comment-section">
+      <h3>Оставить комментарий</h3>
+        <form method="post" action="{% url 'make_add_comment' movie.id %}">
+        {% csrf_token %}
+        <textarea name="text" placeholder="Ваш комментарий..."></textarea>
+        <br>
+        <button type="submit">Отправить комментарий</button>
+      </form>
+    </div>
+
+    <!-- Комментарии от других пользователей -->
+    <div class="user-comments">
+      {% for comment in comments %}
+      <div class="user-comment">
+        <div class="username">{{ comment.author.username }}</div>
+        <div class="comment-text">{{ comment.text }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </main>
+
+</body>
+</html>
+
