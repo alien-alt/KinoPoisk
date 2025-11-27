@@ -19,11 +19,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 # GET Views
-from kino.views import HomeView, GenreMovieView, SearchMovieView, MovieView, ActorView, RegisterView, LoginView
-
+from kino.views import (
+        HomeView, GenreMovieView, SearchMovieView,
+        MovieView, ActorView, RegisterView, LoginView
+        )
 
 # POST Views
-from kino.views import MakeRegister, MakeLogin, MakeLogout, MakeAddComment, MakeAddRating
+from kino.views import (
+        MakeRegister, MakeLogin, MakeLogout, 
+        MakeAddComment, MakeAddRating
+        )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
